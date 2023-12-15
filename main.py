@@ -53,7 +53,11 @@ class ClearStorageApp(QWidget):
                         pass
 
 if __name__ == '__main__':
-    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
+    # Check for admin rights only once
+    if not ctypes.windll.shell32.IsUserAnAdmin():
+        ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
+        sys.exit(0)
+
     app = QApplication(sys.argv)
     window = ClearStorageApp()
     window.show()
